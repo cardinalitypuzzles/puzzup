@@ -155,8 +155,8 @@ AWS_SES_CONFIGURATION_SET = os.environ.get("AWS_SES_CONFIGURATION_SET")
 
 EMAIL_SUBJECT_PREFIX = "[Puzzup] "
 
-DEFAULT_FROM_EMAIL = "puzzup@mitmh2025.com"
-AUTOPOSTPROD_EMAIL = "puzzup@mitmh2025.com"
+DEFAULT_FROM_EMAIL = os.getenv("FROM_EMAIL", None)
+AUTOPOSTPROD_EMAIL = os.getenv("FROM_EMAIL", None)
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # 1 year, in seconds
@@ -224,9 +224,9 @@ POSTPROD_URL = os.environ.get("POSTPROD_URL", "")
 PROD_URL = os.environ.get("PROD_URL", "")
 
 HUNT_TIME = datetime.datetime(
-    year=2025,
+    year=2026,
     month=1,
-    day=17,
+    day=16,
     hour=17,
     minute=0,
     second=0,

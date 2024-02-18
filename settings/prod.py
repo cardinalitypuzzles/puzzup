@@ -10,7 +10,7 @@ SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_PORT = True
 
-ALLOWED_HOSTS = ["puzzup.letswriteahunt.com"]
+ALLOWED_HOSTS = [".herokuapp.com"]
 
 
 sentry_sdk.init(
