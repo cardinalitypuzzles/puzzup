@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
+
 import datetime
 import json
 import os
@@ -134,17 +135,16 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 
-# FIXME: Update email settings
 EMAIL_USE_TLS = True
-EMAIL_HOST = "mail.mypuzzlehunt.com"
-EMAIL_HOST_USER = "noreply@puzzup.mypuzzlehunt.com"
-EMAIL_HOST_PASSWORD = "fixme"
-EMAIL_PORT = 587
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_SUBJECT_PREFIX = "[Puzzup] "
 
-DEFAULT_FROM_EMAIL = "noreply@puzzup.mypuzzlehunt.com"
-AUTOPOSTPROD_EMAIL = "puzzup@mypuzzlehunt.com"
+DEFAULT_FROM_EMAIL = os.getenv("FROM_EMAIL", None)
+AUTOPOSTPROD_EMAIL = os.getenv("FROM_EMAIL", None)
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # 1 year, in seconds
@@ -206,12 +206,11 @@ HUNT_REPO_BRANCH = os.environ.get("HUNT_REPO_BRANCH", "main")
 HUNT_REPO_CLIENT = os.path.join(HUNT_REPO, "client")
 SSH_KEY = os.environ.get("SSH_KEY_PATH", "~/.ssh/id_rsa")
 
-# FIXME: Set hunt time
 HUNT_TIME = datetime.datetime(
-    year=2023,
-    month=1,
-    day=15,
-    hour=17,
+    year=2024,
+    month=6,
+    day=1,
+    hour=0,
     minute=0,
     second=0,
     microsecond=0,

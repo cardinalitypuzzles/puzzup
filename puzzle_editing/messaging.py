@@ -12,6 +12,10 @@ def send_mail_wrapper(subject, template, context, recipients):
         logger.warning("Not sending email due to empty recipients: %s", template)
         return
 
+    if not settings.EMAIL_HOST_USER:
+        logger.info("Not sending email since missing environment variables")
+        return
+
     mail = EmailMultiAlternatives(
         subject=settings.EMAIL_SUBJECT_PREFIX + subject,
         body=render_to_string(template + ".txt", context),

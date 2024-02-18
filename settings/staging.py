@@ -2,4 +2,4 @@ from settings.base import *  # pylint: disable=unused-wildcard-import,wildcard-i
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]  # FIXME: where are you hosting staging PuzzUp?
+ALLOWED_HOSTS = [".herokuapp.com"]
