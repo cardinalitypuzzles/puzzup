@@ -143,6 +143,7 @@ We used Heroku.
 
 **Environment vars for integrating Google Drive**
 
+- `PUZZUP_URL` = PuzzUp URL, for linking to PuzzUp from sheet
 - `TESTSOLVING_FOLDER_ID` = top-level dir for testsolve spreadsheets
 - `PUZZLE_DRAFT_FOLDER_ID` = top-level dir for puzzle drafts
 - `FACTCHECKING_FOLDER_ID` = top-level dir for factcheck sheets
