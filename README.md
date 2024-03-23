@@ -228,7 +228,7 @@ By default, `DISCORD_OAUTH_SCOPES` is set to `identify` only, since that is all 
 You'll need to add a bot to your server with the following permissions - the below link will do this for you, just add your client ID:
 
 ```
-https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=268438544&scope=applications.commands%20bot
+https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=268446736&scope=applications.commands%20bot
 ```
 
 - Manage channels - needed to rename, create and reorganise channels
