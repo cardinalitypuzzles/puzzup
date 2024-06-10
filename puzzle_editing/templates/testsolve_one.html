@@ -82,7 +82,8 @@
 		<div class="box">
 			{% if is_solved %}
 			<h4>🎉 This puzzle has been solved! 🎉</h4>
-			{% elif participation %}
+			{% endif %}
+			{% if participation %}
 			<form method="POST">
 				{% csrf_token %}
 				{{ guess_form.guess }}
