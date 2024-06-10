@@ -22,7 +22,6 @@
         <p class="block warning">You are in this testsolve session, but you do not appear in the list above because you are an editor or author.</p>
     {% endif %}
 
-
     {% if participation %}
         <div class="box">
             <p class="block">You are in this testsolving session.</p>
@@ -30,7 +29,6 @@
             {% if spoiled %}
                 <p class="block warning">You are testsolving a puzzle you are spoiled on.</p>
             {% endif %}
-
 
             {% if participation.ended %}
                 <p class="block warning">You finished this testsolve at {{ participation.ended }}</p>
@@ -104,7 +102,8 @@
                     <div class="box">
                         {% if is_solved %}
                             <h4>🎉 This puzzle has been solved! 🎉</h4>
-                        {% elif participation %}
+                        {% endif %}
+                        {% if participation %}
                             <form method="POST">
                                 {% csrf_token %}
                                 {{ guess_form.guess }}
