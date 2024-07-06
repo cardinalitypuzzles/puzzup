@@ -150,6 +150,7 @@ We used Heroku.
 - `PUZZUP_URL` = PuzzUp URL, for linking to PuzzUp from sheet
 - `TESTSOLVING_FOLDER_ID` = top-level dir for testsolve spreadsheets
 - `PUZZLE_DRAFT_FOLDER_ID` = top-level dir for puzzle drafts
+- `TESTSOLVING_TEMPLATE_ID` = Google Sheet ID of template to copy for testsolving
 - `FACTCHECKING_FOLDER_ID` = top-level dir for factcheck sheets
 - `FACTCHECKING_TEMPLATE_ID` = Google Sheet ID of template to copy for factchecking
 
