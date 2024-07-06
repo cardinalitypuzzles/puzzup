@@ -41,6 +41,7 @@ class GoogleManager:
             scopes=SCOPES,
         )
         self.drive = build("drive", "v3", credentials=self.creds)
+        self.files = self.drive.files()
         self.spreadsheets = build("sheets", "v4", credentials=self.creds).spreadsheets()
 
     def move_to_folder(self, file_id, folder_id):
@@ -137,6 +138,7 @@ class GoogleManager:
             text="Puzzup Testsolve Session",
             url=f"{settings.PUZZUP_URL}/testsolve/{session.id}",
             folder_id=folder_id,
+            template_id=settings.TESTSOLVING_TEMPLATE_ID,
         )
         self.make_file_public_edit(sheet_id)
 
@@ -175,45 +177,61 @@ class GoogleManager:
             .get("id")
         )
         self.move_to_folder(template_id, settings.FACTCHECKING_FOLDER_ID)
+        self.transfer_ownership(template_id)
         return template_id
 
-    def _create_sheet(self, title, text, url, folder_id):
-        """Creates spreadsheet where top-left cell is text that goes to given URL."""
-        spreadsheet_id = (
-            self.spreadsheets.create(
-                body={
-                    "properties": {
-                        "title": title,
-                    },
-                    "sheets": [
-                        {
-                            "data": [
-                                {
-                                    "startRow": 0,
-                                    "startColumn": 0,
-                                    "rowData": [
-                                        {
-                                            "values": [
-                                                {
-                                                    "userEnteredValue": {
-                                                        "formulaValue": f'=HYPERLINK("{url}", "{text}")'
-                                                    },
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                }
-                            ]
-                        }
-                    ],
-                },
-                fields="spreadsheetId",
-            )
-            .execute()
-            .get("spreadsheetId")
+    def transfer_ownership(self, file_id):
+        file = self.files.get(fileId=file_id, fields="id,permissions").execute()
+        permission = next(
+            p for p in file["permissions"] if p["emailAddress"] == settings.SERVER_EMAIL
         )
+        self.drive.permissions().update(
+            fileId=file["id"],
+            permissionId=permission["id"],
+            body={"role": "writer", "pendingOwner": "true"},
+        ).execute()
+
+    def _create_sheet(self, title, text, url, folder_id, template_id=None):
+        """Creates spreadsheet where top-left cell is text that goes to given URL."""
+        if template_id:
+            spreadsheet_id = (
+                self.files.copy(
+                    fileId=template_id,
+                    fields="id",
+                    body={"name": title},
+                )
+                .execute()
+                .get("id")
+            )
+
+        else:
+            spreadsheet_id = (
+                self.spreadsheets.create(
+                    body={
+                        "properties": {
+                            "title": title,
+                        },
+                    },
+                    fields="spreadsheetId",
+                )
+                .execute()
+                .get("spreadsheetId")
+            )
+
+        req_body = {
+            "values": [
+                [f'=HYPERLINK("{url}", "{text}")'],
+            ]
+        }
+        self.spreadsheets.values().update(
+            spreadsheetId=spreadsheet_id,
+            range="A1:B2",
+            valueInputOption="USER_ENTERED",
+            body=req_body,
+        ).execute()
 
         self.move_to_folder(spreadsheet_id, folder_id)
+        self.transfer_ownership(spreadsheet_id)
         return spreadsheet_id
 
     def get_gdoc_html(self, file_id):
