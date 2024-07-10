@@ -692,7 +692,8 @@ def puzzle_new(request):
                     tc.id,
                     f"This puzzle has been created in status **{cat}**!\n"
                     f"Access it at {url}\n"
-                    f"Brainstorming/solution sheet: {puzzle.solution}\n"
+                    f"Brainstorming/solution {puzzle.solution}\n"
+                    f"Draft {puzzle.content}\n"
                     f"Author(s): {', '.join(author_tags)}",
                 )
             add_comment(

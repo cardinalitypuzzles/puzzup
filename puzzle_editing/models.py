@@ -563,8 +563,14 @@ class Puzzle(models.Model):
         # We call super().save first in order to ensure the id for this instance
         # exists.
         if is_new and google.enabled():
-            sheet_id = google.GoogleManager.instance().create_brainstorm_sheet(self)
-            self.solution = f"https://docs.google.com/spreadsheets/d/{sheet_id}"
+            google_manager = google.GoogleManager.instance()
+            folder_id = google_manager.create_puzzle_folder(self)
+            sheet_id = google_manager.create_brainstorm_sheet(self, folder_id)
+            draft_id = google_manager.create_draft_doc(self, folder_id)
+            self.solution = f"[Folder](<https://drive.google.com/drive/folders/{folder_id}>) and [Sheet](<https://docs.google.com/spreadsheets/d/{sheet_id}>)"
+            self.content = (
+                f"[Draft Doc](<https://docs.google.com/document/d/{draft_id}>)"
+            )
             super().save(*args, **kwargs)
         elif self.status == status.NEEDS_FACTCHECK:
             if not getattr(self, "factcheck", None):
@@ -670,13 +676,15 @@ class Puzzle(models.Model):
             "additional_authors": self.authors_addl,
             "editors": re.sub(r"([^,]+?), ([^,]+?)$", r"\1 and \2", ", ".join(editors)),
             # "postprodders": re.sub(r"([^,]+?), ([^,]+?)$", r"\1 and \2", ", ".join(postprodders)),
-            "puzzle_slug": self.postprod.slug
-            if self.has_postprod()
-            else re.sub(
-                r'[<>#%\'"|{}\[\])(\\\^?=`;@&,]',
-                "",
-                re.sub(r"[ \/]+", "-", self.name),
-            ).lower(),
+            "puzzle_slug": (
+                self.postprod.slug
+                if self.has_postprod()
+                else re.sub(
+                    r'[<>#%\'"|{}\[\])(\\\^?=`;@&,]',
+                    "",
+                    re.sub(r"[ \/]+", "-", self.name),
+                ).lower()
+            ),
         }
 
     @property

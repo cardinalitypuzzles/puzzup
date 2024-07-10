@@ -147,7 +147,8 @@ def _puzzleInfoHelper(puzzle: Dict) -> str:
         f"Name: ||{puzzle['name']}||\n"
         f"This puzzle has status **{puzzle['status']}**!\n"
         f"Access it at <{puzzle['url']}>\n"
-        f"Brainstorming/solution sheet: <{puzzle['solution']}>\n"
+        f"Brainstorming/solution {puzzle['solution']}\n"
+        f"Draft {puzzle['content']}\n"
         f"Author(s): {puzzle['authors']}"
     )
 
@@ -170,6 +171,7 @@ def puzzleInfoHandler(request, payload):
             "url": external_puzzle_url(request, p),
             "solution": p.solution,
             "authors": p.author_list,
+            "content": p.content,
         }
         for p in puzzle
     ]

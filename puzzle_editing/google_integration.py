@@ -8,6 +8,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 SCOPES = [
+    "https://www.googleapis.com/auth/docs",
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
@@ -39,6 +40,7 @@ class GoogleManager:
         self.files = drive_service.files()
         self.permissions = drive_service.permissions()
         self.spreadsheets = build("sheets", "v4", credentials=self.creds).spreadsheets()
+        self.docs = build("docs", "v1", credentials=self.creds).documents()
 
     def move_to_folder(self, file_id, folder_id):
         # file_id is allowed to be a folder
@@ -52,7 +54,7 @@ class GoogleManager:
             removeParents=existing_parents,
         ).execute()
 
-    def create_brainstorm_sheet(self, puzzle):
+    def create_puzzle_folder(self, puzzle):
         # Create a child folder in the puzzle draft folder
         file_metadata = {
             "name": puzzle.spoiler_free_title(),
@@ -63,10 +65,19 @@ class GoogleManager:
         )
         self.move_to_folder(folder_id, settings.PUZZLE_DRAFT_FOLDER_ID)
         self.transfer_ownership(folder_id)
+        return folder_id
+
+    def create_brainstorm_sheet(self, puzzle, folder_id):
         return self._create_sheet(
             title=f"{puzzle.spoiler_free_title()} Brainstorm",
             text="Puzzup Link",
             url=f"{settings.PUZZUP_URL}/puzzle/{puzzle.id}",
+            folder_id=folder_id,
+        )
+
+    def create_draft_doc(self, puzzle, folder_id):
+        return self._create_doc(
+            title=f"{puzzle.spoiler_free_title()} Draft",
             folder_id=folder_id,
         )
 
@@ -148,6 +159,22 @@ class GoogleManager:
         self.move_to_folder(spreadsheet_id, folder_id)
         self.transfer_ownership(spreadsheet_id)
         return spreadsheet_id
+
+    def _create_doc(self, title, folder_id):
+        """Creates an empty document and move to folder."""
+        doc_id = (
+            self.docs.create(
+                body={
+                    "title": title,
+                },
+                fields="documentId",
+            )
+            .execute()
+            .get("documentId")
+        )
+        self.move_to_folder(doc_id, folder_id)
+        self.transfer_ownership(doc_id)
+        return doc_id
 
     def get_gdoc_html(self, file_id):
         html = self.files.export(fileId=file_id, mimeType="text/html").execute()
