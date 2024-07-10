@@ -1,5 +1,6 @@
-FROM python:3.9.18
+FROM python:3.10.9-alpine
 ENV PYTHONUNBUFFERED 1
+ENV GIT_PYTHON_REFRESH=quiet
 
 WORKDIR /usr/src/puzzup
 
