@@ -183,7 +183,9 @@ class GoogleManager:
     def transfer_ownership(self, file_id):
         file = self.files.get(fileId=file_id, fields="id,permissions").execute()
         permission = next(
-            p for p in file["permissions"] if p["emailAddress"] == settings.SERVER_EMAIL
+            p
+            for p in file["permissions"]
+            if p["emailAddress"] == settings.GOOGLE_DRIVE_EMAIL
         )
         self.drive.permissions().update(
             fileId=file["id"],
