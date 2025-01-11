@@ -16,7 +16,7 @@ services:
       - .:/usr/src/puzzup/:Z
       - /usr/src/puzzup/node_modules
     ports:
-      - 8000:8000
+      - 8888:8000
     environment:
       - DATABASE_URL=postgres://puzzup_user:puzzup_password@db/puzzup
     env_file:

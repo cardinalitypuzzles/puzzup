@@ -6,7 +6,7 @@ from settings.base import *  # pylint: disable=unused-wildcard-import,wildcard-i
 DEBUG = False
 SECURE_SSL_REDIRECT = True
 
-ALLOWED_HOSTS = [".herokuapp.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "puzzup.vehemence.org"]
 
 sentry_sdk.init(
     dsn="",
