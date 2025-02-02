@@ -81,20 +81,3 @@ RUN --mount=type=cache,target=/root/.cache \
     poetry install --no-root --only main
 
 COPY . .
-RUN DJANGO_SETTINGS_MODULE=settings.prod python manage.py collectstatic --noinput
-
-COPY --chmod=755 <<'EOF' /usr/src/app/start.sh
-#!/bin/bash
-set -eux
-set -o pipefail
-
-aws ssm get-parameter --output text --query Parameter.Value --with-decryption --name puzzup-${PUZZUP_ENV+${PUZZUP_ENV}-}env > .env
-mkdir -p credentials
-aws ssm get-parameter --output text --query Parameter.Value --with-decryption --name puzzup-drive-credentials > credentials/drive-credentials.json
-python manage.py migrate
-python manage.py loaddata --app puzzle_editing groups
-exec env NPROC="$(nproc --ignore=1)" supervisord -c /etc/supervisord.conf
-EOF
-
-EXPOSE 80
-CMD ["./start.sh"]

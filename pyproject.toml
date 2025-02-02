@@ -14,6 +14,7 @@ python = ">=3.12,<3.13"
 asgiref = "^3.8.1"
 beautifulsoup4 = "^4.12.3"
 boto3 = "^1.35.90"
+daphne = "^4.1.2"
 discord-interactions = "^0.4.0"
 discord-py = "^2.4.0"
 dj-database-url = "^2.3.0"
@@ -42,7 +43,6 @@ supervisor = "^4.2.5"
 whitenoise = "^6.8.2"
 
 [tool.poetry.group.dev.dependencies]
-daphne = "^4.1.2"
 django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
 djhtml = "^3.0.7"
 google-api-python-client-stubs = "^1.28.0"
