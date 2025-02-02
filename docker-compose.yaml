@@ -13,8 +13,8 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/puzzup/:Z
-      - /usr/src/puzzup/node_modules
+      - .:/usr/src/app/:Z
+      - /usr/src/app/node_modules
     ports:
       - 8000:8000
     environment:
@@ -25,6 +25,20 @@ services:
       - ./docker-entrypoint.sh
     depends_on:
       - db
+  discord:
+    build: .
+    command: python manage.py discord_daemon
+    volumes:
+      - .:/usr/src/app/:Z
+    environment:
+      - DATABASE_URL=postgres://puzzup_user:puzzup_password@db/puzzup
+    env_file:
+      - ./.env
+    entrypoint:
+      - ./docker-entrypoint.sh
+    depends_on:
+      - db
+      - web
 
 volumes:
   postgres_data:
