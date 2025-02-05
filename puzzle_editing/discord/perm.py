@@ -39,6 +39,7 @@ class Permission(Flag):
     True
     """
 
+    # https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags
     NO_PERMISSION = 0
     CREATE_INSTANT_INVITE = 0x00000001
     KICK_MEMBERS = 0x00000002
@@ -78,7 +79,16 @@ class Permission(Flag):
     CREATE_PRIVATE_THREADS = 0x1000000000
     USE_EXTERNAL_STICKERS = 0x2000000000
     SEND_MESSAGES_IN_THREADS = 0x4000000000
-    START_EMBEDDED_ACTIVITIES = 0x8000000000
+    USE_EMBEDDED_ACTIVITIES = 0x8000000000
+    MODERATE_MEMBERS = (1 << 40)
+    VIEW_CREATOR_MONETIZATION_ANALYTICS = (1 << 41)
+    USE_SOUNDBOARD = (1 << 42)
+    CREATE_GUILD_EXPRESSIONS = (1 << 43)
+    CREATE_EVENTS = (1 << 44)
+    USE_EXTERNAL_SOUNDS = (1 << 45)
+    SEND_VOICE_MESSAGES = (1 << 46)
+    SEND_POLLS = (1 << 49)
+    USE_EXTERNAL_APPS = (1 << 50)
 
     @classmethod
     def __get_validators__(cls):
